@@ -84,6 +84,8 @@ namespace CFKillFeedback
 		public static float icon_fadeout_seconds = 1.25f;
 		// 配置文件-是否连杀图标优先级高于爆头
 		public static bool is_dont_use_headshot_icon_if_combo = false;
+		// 配置文件-禁用爆头判定
+		public static bool disable_headshot = false;
 		// 上次击杀的引擎启动时间，获取方式是Time.time
 		public static float last_kill_time = 0.0f;
 		// 连杀数
@@ -168,10 +170,12 @@ namespace CFKillFeedback
 				if (headshot) //爆头
 				{
 					audio = KillFeedbackAudios_FMOD["headshot"];
+					icon = KillFeedbackIcons["headshot"];
 				}
 				if (goldheadshot) //黄金爆头
 				{
 					audio = KillFeedbackAudios_FMOD["headshot"];
+					icon = KillFeedbackIcons["headshot_gold"];
 				}
 				if (melee) //近战
 				{
@@ -291,6 +295,7 @@ namespace CFKillFeedback
 			DefaultConfig.TryAdd("icon_stay_seconds", 1.0f);
 			DefaultConfig.TryAdd("icon_fadeout_seconds", 1.25f);
 			DefaultConfig.TryAdd("is_dont_use_headshot_icon_if_combo", false);
+			DefaultConfig.TryAdd("disable_headshot", false);
 			Instance = this;
 			if (Loaded)
 			{
@@ -370,6 +375,11 @@ namespace CFKillFeedback
 							is_dont_use_headshot_icon_if_combo = (bool)property.Value;
 							continue;
 						}
+						if (property.Name == "disable_headshot" && property.Value.Type == JTokenType.Boolean)
+						{
+							disable_headshot = (bool)property.Value;
+							continue;
+						}
 					}
                 }
 				else
@@ -399,20 +409,42 @@ namespace CFKillFeedback
 			UnityEngine.Debug.Log("CFKillFeedback: 开始加载资源/Starting loading resources");
 			bool success = true;
 			string absolute_path = Path.Combine(Utils.GetDllDirectory(), "CustomPacks", "cf");
+			string streaming_asset_path = Path.Combine(Application.streamingAssetsPath, "CFKillFeedback", "CustomPacks", "cf");
+			Directory.CreateDirectory(streaming_asset_path);
 			UnityEngine.Debug.Log("CFKillFeedback: Absolute path = " + absolute_path);
 			UnityEngine.Debug.Log("CFKillFeedback: 正在遍历图标名称列表/Foreaching IconNames list");
 			foreach (string icon_name in IconNames)
 			{
-				string this_path = Path.Combine(absolute_path, icon_name + ".png");
+				byte[] icon_bytes;
+				Texture2D icon_texture;
+				string this_path = Path.Combine(streaming_asset_path, icon_name + ".png");
 				UnityEngine.Debug.Log("CFKillFeedback: Now path is " + this_path);
+				if (!File.Exists(this_path))
+				{
+					UnityEngine.Debug.Log("CFKillFeedback: 覆写文件不存在 = " + this_path);
+				}
+				else
+				{
+					icon_bytes = File.ReadAllBytes(this_path);
+					icon_texture = new Texture2D(256, 256);
+					if (icon_texture.LoadImage(icon_bytes))
+					{
+						KillFeedbackIcons.TryAdd(icon_name, icon_texture);
+						success = success && true;
+						UnityEngine.Debug.Log("CFKillFeedback: 纹理加载成功 = " + this_path);
+						continue;
+					}
+					UnityEngine.Debug.LogError("CFKillFeedback: 加载纹理失败/Failed to load texture = " + this_path);
+				}
+				this_path = Path.Combine(absolute_path, icon_name + ".png");
 				if (!File.Exists(this_path))
 				{
 					UnityEngine.Debug.LogError("CFKillFeedback: 文件不存在 = " + this_path);
 					success = false;
 					continue;
 				}
-				byte[] icon_bytes = File.ReadAllBytes(this_path);
-				Texture2D icon_texture = new Texture2D(256, 256);
+				icon_bytes = File.ReadAllBytes(this_path);
+				icon_texture = new Texture2D(256, 256);
 				if (icon_texture.LoadImage(icon_bytes))
 				{
 					KillFeedbackIcons.TryAdd(icon_name, icon_texture);
@@ -426,17 +458,37 @@ namespace CFKillFeedback
 			UnityEngine.Debug.Log("CFKillFeedback: 正在遍历音频名称列表/Foreaching AudioNames list");
 			foreach (string audio_name in AudioNames)
 			{
-				string this_path = Path.Combine(absolute_path, audio_name + ".wav");
+				RESULT fmod_create_result;
+				Sound sound;
+				string this_path = Path.Combine(streaming_asset_path, audio_name + ".wav");
 				UnityEngine.Debug.Log("CFKillFeedback: Now path is " + this_path);
+				if (!File.Exists(this_path))
+				{
+					UnityEngine.Debug.Log("CFKillFeedback: 覆写文件不存在 = " + this_path);
+				}
+				else
+				{
+					fmod_create_result = RuntimeManager.CoreSystem.createSound(this_path, MODE.LOOP_OFF, out sound);
+					if (fmod_create_result == RESULT.OK)
+					{
+						KillFeedbackAudios_FMOD.TryAdd(audio_name, sound);
+						success = success && true;
+						UnityEngine.Debug.Log("CFKillFeedback: 成功加载音频 = " + this_path);
+						continue;
+					}
+					else
+					{
+						UnityEngine.Debug.LogError("CFKillFeedback: 加载音频时出错 = " + fmod_create_result.ToString());
+					}
+				}
+				this_path = Path.Combine(absolute_path, audio_name + ".wav");
 				if (!File.Exists(this_path))
 				{
 					UnityEngine.Debug.LogError("CFKillFeedback: 文件不存在 = " + this_path);
 					success = false;
 					continue;
 				}
-				//UnityEngine.Debug.Log("CFKillFeedback: 将异步读取音频 = " + this_path);
-				//StartCoroutine(GetAudioClip("file:///" + this_path.Replace(" ", "%20"), audio_name));
-				RESULT fmod_create_result = RuntimeManager.CoreSystem.createSound(this_path, MODE.LOOP_OFF, out Sound sound);
+				fmod_create_result = RuntimeManager.CoreSystem.createSound(this_path, MODE.LOOP_OFF, out sound);
 				if (fmod_create_result == RESULT.OK)
 				{
 					KillFeedbackAudios_FMOD.TryAdd(audio_name, sound);
