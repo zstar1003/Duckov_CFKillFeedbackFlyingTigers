@@ -8,7 +8,7 @@ using UnityEngine.UI;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace CFKillFeedback
+namespace CFKillFeedbackFoxHawl
 {
 	public class ModBehaviour : Duckov.Modding.ModBehaviour
 	{
@@ -307,20 +307,20 @@ namespace CFKillFeedback
 			}
 			if (LoadRes())
 			{
-				UnityEngine.Debug.Log("CFKillFeedback: 已载入/Loaded");
+				UnityEngine.Debug.Log("CFKillFeedbackFoxHawl: 已载入/Loaded");
 				Loaded = true;
 
             }
 			else
 			{
-				UnityEngine.Debug.LogError("CFKillFeedback: 载入资源时出现问题/Something wrong when loading resources");
+				UnityEngine.Debug.LogError("CFKillFeedbackFoxHawl: 载入资源时出现问题/Something wrong when loading resources");
 			}
 		}
 		private void OnEnable()
 		{
 			Health.OnDead += OnDead;
 			// 读取或创建配置文件
-			string config_path = Path.Combine(Application.streamingAssetsPath, "CFKillFeedback.cfg");
+			string config_path = Path.Combine(Application.streamingAssetsPath, "CFKillFeedbackFoxHawl.cfg");
             if (File.Exists(config_path))
 			{
 				string config_content = File.ReadAllText(config_path);
@@ -388,7 +388,7 @@ namespace CFKillFeedback
                 }
 				else
 				{
-					UnityEngine.Debug.LogError("CFKillFeedback: 读取配置文件时出错/Failed to read config file");
+					UnityEngine.Debug.LogError("CFKillFeedbackFoxHawl: 读取配置文件时出错/Failed to read config file");
 				}
 			}
 			else
@@ -410,22 +410,22 @@ namespace CFKillFeedback
 		// 加载资源方法，返回成功与否
 		public bool LoadRes()
 		{
-			UnityEngine.Debug.Log("CFKillFeedback: 开始加载资源/Starting loading resources");
+			UnityEngine.Debug.Log("CFKillFeedbackFoxHawl: 开始加载资源/Starting loading resources");
 			bool success = true;
 			string absolute_path = Path.Combine(Utils.GetDllDirectory(), "CustomPacks", "cf");
-			string streaming_asset_path = Path.Combine(Application.streamingAssetsPath, "CFKillFeedback", "CustomPacks", "cf");
+			string streaming_asset_path = Path.Combine(Application.streamingAssetsPath, "CFKillFeedbackFoxHawl", "CustomPacks", "cf");
 			Directory.CreateDirectory(streaming_asset_path);
-			UnityEngine.Debug.Log("CFKillFeedback: Absolute path = " + absolute_path);
-			UnityEngine.Debug.Log("CFKillFeedback: 正在遍历图标名称列表/Foreaching IconNames list");
+			UnityEngine.Debug.Log("CFKillFeedbackFoxHawl: Absolute path = " + absolute_path);
+			UnityEngine.Debug.Log("CFKillFeedbackFoxHawl: 正在遍历图标名称列表/Foreaching IconNames list");
 			foreach (string icon_name in IconNames)
 			{
 				byte[] icon_bytes;
 				Texture2D icon_texture;
 				string this_path = Path.Combine(streaming_asset_path, icon_name + ".png");
-				UnityEngine.Debug.Log("CFKillFeedback: Now path is " + this_path);
+				UnityEngine.Debug.Log("CFKillFeedbackFoxHawl: Now path is " + this_path);
 				if (!File.Exists(this_path))
 				{
-					UnityEngine.Debug.Log("CFKillFeedback: 覆写文件不存在 = " + this_path);
+					UnityEngine.Debug.Log("CFKillFeedbackFoxHawl: 覆写文件不存在 = " + this_path);
 				}
 				else
 				{
@@ -435,15 +435,15 @@ namespace CFKillFeedback
 					{
 						KillFeedbackIcons.TryAdd(icon_name, icon_texture);
 						success = success && true;
-						UnityEngine.Debug.Log("CFKillFeedback: 纹理加载成功 = " + this_path);
+						UnityEngine.Debug.Log("CFKillFeedbackFoxHawl: 纹理加载成功 = " + this_path);
 						continue;
 					}
-					UnityEngine.Debug.LogError("CFKillFeedback: 加载纹理失败/Failed to load texture = " + this_path);
+					UnityEngine.Debug.LogError("CFKillFeedbackFoxHawl: 加载纹理失败/Failed to load texture = " + this_path);
 				}
 				this_path = Path.Combine(absolute_path, icon_name + ".png");
 				if (!File.Exists(this_path))
 				{
-					UnityEngine.Debug.LogError("CFKillFeedback: 文件不存在 = " + this_path);
+					UnityEngine.Debug.LogError("CFKillFeedbackFoxHawl: 文件不存在 = " + this_path);
 					success = false;
 					continue;
 				}
@@ -453,22 +453,22 @@ namespace CFKillFeedback
 				{
 					KillFeedbackIcons.TryAdd(icon_name, icon_texture);
 					success = success && true;
-					UnityEngine.Debug.Log("CFKillFeedback: 纹理加载成功 = " + this_path);
+					UnityEngine.Debug.Log("CFKillFeedbackFoxHawl: 纹理加载成功 = " + this_path);
 					continue;
 				}
 				success = false;
-				UnityEngine.Debug.LogError("CFKillFeedback: 加载纹理失败/Failed to load texture = " + this_path);
+				UnityEngine.Debug.LogError("CFKillFeedbackFoxHawl: 加载纹理失败/Failed to load texture = " + this_path);
 			}
-			UnityEngine.Debug.Log("CFKillFeedback: 正在遍历音频名称列表/Foreaching AudioNames list");
+			UnityEngine.Debug.Log("CFKillFeedbackFoxHawl: 正在遍历音频名称列表/Foreaching AudioNames list");
 			foreach (string audio_name in AudioNames)
 			{
 				RESULT fmod_create_result;
 				Sound sound;
 				string this_path = Path.Combine(streaming_asset_path, audio_name + ".wav");
-				UnityEngine.Debug.Log("CFKillFeedback: Now path is " + this_path);
+				UnityEngine.Debug.Log("CFKillFeedbackFoxHawl: Now path is " + this_path);
 				if (!File.Exists(this_path))
 				{
-					UnityEngine.Debug.Log("CFKillFeedback: 覆写文件不存在 = " + this_path);
+					UnityEngine.Debug.Log("CFKillFeedbackFoxHawl: 覆写文件不存在 = " + this_path);
 				}
 				else
 				{
@@ -477,18 +477,18 @@ namespace CFKillFeedback
 					{
 						KillFeedbackAudios_FMOD.TryAdd(audio_name, sound);
 						success = success && true;
-						UnityEngine.Debug.Log("CFKillFeedback: 成功加载音频 = " + this_path);
+						UnityEngine.Debug.Log("CFKillFeedbackFoxHawl: 成功加载音频 = " + this_path);
 						continue;
 					}
 					else
 					{
-						UnityEngine.Debug.LogError("CFKillFeedback: 加载音频时出错 = " + fmod_create_result.ToString());
+						UnityEngine.Debug.LogError("CFKillFeedbackFoxHawl: 加载音频时出错 = " + fmod_create_result.ToString());
 					}
 				}
 				this_path = Path.Combine(absolute_path, audio_name + ".wav");
 				if (!File.Exists(this_path))
 				{
-					UnityEngine.Debug.LogError("CFKillFeedback: 文件不存在 = " + this_path);
+					UnityEngine.Debug.LogError("CFKillFeedbackFoxHawl: 文件不存在 = " + this_path);
 					success = false;
 					continue;
 				}
@@ -497,11 +497,11 @@ namespace CFKillFeedback
 				{
 					KillFeedbackAudios_FMOD.TryAdd(audio_name, sound);
 					success = success && true;
-					UnityEngine.Debug.Log("CFKillFeedback: 成功加载音频 = " + this_path);
+					UnityEngine.Debug.Log("CFKillFeedbackFoxHawl: 成功加载音频 = " + this_path);
 				}
 				else
 				{
-					UnityEngine.Debug.LogError("CFKillFeedback: 加载音频时出错 = " + fmod_create_result.ToString());
+					UnityEngine.Debug.LogError("CFKillFeedbackFoxHawl: 加载音频时出错 = " + fmod_create_result.ToString());
 					success = false;
 				}
 			}
@@ -521,7 +521,7 @@ namespace CFKillFeedback
 			ui_image.preserveAspect = true;
 			ui_canvasgroup = game_object.AddComponent<CanvasGroup>();
 			ui_transform.SetParent(hud_manager.transform);
-			UnityEngine.Debug.Log("CFKillFeedback: 已创建UI/UI created");
+			UnityEngine.Debug.Log("CFKillFeedbackFoxHawl: 已创建UI/UI created");
 		}
     }
 }

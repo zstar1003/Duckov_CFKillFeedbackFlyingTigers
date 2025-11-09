@@ -1,0 +1,13 @@
+"workshopitem"
+{
+	"appid"		"3167020"
+	"publishedfileid"		"0"
+	"contentfolder"		"/Users/zstar/code/Duckov_CFKillFeedback/workshop_upload/CFKillFeedbackFoxHawl"
+	"previewfile"		"/Users/zstar/code/Duckov_CFKillFeedback/workshop_upload/CFKillFeedbackFoxHawl/preview.png"
+	"visibility"		"0"
+	"title"		"CF击杀反馈(灵狐者)"
+	"description"		"CF 击杀反馈的灵狐者版本
+
+在 https://steamcommunity.com/sharedfiles/filedetails/?id=3590362366 mod 的基础上，将音效改成灵狐者。"
+	"changenote"		"v1.0.0 首次提交"
+}

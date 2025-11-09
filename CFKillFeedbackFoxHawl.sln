@@ -1,9 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36518.9 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFKillFeedback", "CFKillFeedback.csproj", "{CF219848-8576-447C-BE72-5BFC7A7C3D62}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFKillFeedbackFoxHawl", "CFKillFeedbackFoxHawl.csproj", "{CF219848-8576-447C-BE72-5BFC7A7C3D62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

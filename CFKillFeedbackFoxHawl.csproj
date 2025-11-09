@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Nullable>enable</Nullable>
+		<!-- This should be the folder that contains Duckov.exe (Windows) or Duckov.app (Mac) -->
+		<!-- 下面这行里填写你的鸭科夫安装路径，这样编译器就能找到相关的dll文件 -->
+		<!-- Windows: D:\Program Files\Steam\steamapps\common\Escape from Duckov -->
+		<!-- Mac: /Users/yourusername/Library/Application Support/Steam/steamapps/common/Escape from Duckov/Duckov.app/Contents/Resources/Data -->
+		<DuckovPath>/Users/zstar/Library/Application Support/Steam/steamapps/common/Escape from Duckov/Duckov.app/Contents/Resources/Data</DuckovPath>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="$(DuckovPath)/Managed/TeamSoda.*.dll" />
+		<Reference Include="$(DuckovPath)/Managed/ItemStatsSystem.dll" />
+		<Reference Include="$(DuckovPath)/Managed/Unity*.dll" />
+		<Reference Include="$(DuckovPath)/Managed/FMODUnity.dll" />
+		<Reference Include="$(DuckovPath)/Managed/Newtonsoft.Json.dll" />
+	</ItemGroup>
+</Project>
